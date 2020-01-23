@@ -122,6 +122,12 @@ AckBatch.prototype._processBatch = function () {
   }
 };
 
+
+/*
+  BEWARE: by the moment when this fucntion is called, this.acking is True
+  The caller of _resolveAll() has set this.acking = True, but expects the
+  _resolveAll() setting in to False when necessary.
+*/
 AckBatch.prototype._resolveAll = function (status, first, last) {
   const count = this.messages.length;
   const emitEmpty = function () {
@@ -157,6 +163,9 @@ AckBatch.prototype._resolveAll = function (status, first, last) {
         }
         this.acking = false;
       }.bind(this));
+  }
+  else {
+    this.acking = false;
   }
 };
 
